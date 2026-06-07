@@ -13,6 +13,13 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Không đủ hàng" });
     }
 
+    // Seller không được tự mua hàng của mình
+    if (listing.sellerId.toString() === req.userId) {
+      return res
+        .status(403)
+        .json({ message: "Bạn không thể mua hàng của chính mình" });
+    }
+
     const itemPrice = listing.pricing.fixedPrice;
     const subtotal = itemPrice * quantity;
     const shippingCost = 30000;

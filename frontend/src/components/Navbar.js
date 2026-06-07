@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function Navbar() {
+function Navbar({ hideCategories = false }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +18,27 @@ function Navbar() {
       navigate("/listings");
     }
   };
+
+  const myEbayItems = [
+    { label: "Summary", to: null },
+    { label: "Recently Viewed", to: null },
+    { label: "Bids/Offers", to: null },
+    { label: "Watchlist", to: null },
+    { label: "Purchase History", to: null },
+    { label: "Buy Again", to: null },
+    { label: "Selling", to: "/sell" },
+    { label: "Saved Feed", to: null },
+    { label: "Saved Searches", to: null },
+    { label: "Saved Sellers", to: null },
+    { label: "Payments", to: null },
+    { label: "My Garage", to: null },
+    { label: "Preferences", to: null },
+    { label: "My Collection", to: null },
+    { label: "Messages", to: "/messages" },
+    { label: "PSA Vault", to: null },
+    { label: "Issue Resolution Center", to: "/complaints" },
+  ];
+
   return (
     <header className="w-full bg-white">
       {/* Top bar */}
@@ -72,22 +93,50 @@ function Navbar() {
                 />
               </svg>
             </div>
-            <div className="flex items-center gap-1 cursor-pointer hover:underline">
-              <span>My eBay</span>
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+
+            {/* My eBay dropdown */}
+            <div className="relative group">
+              <div className="flex items-center gap-1 cursor-pointer hover:underline">
+                <span>My eBay</span>
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+
+              {/* Dropdown panel */}
+              <div className="absolute left-[-20px] top-full mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 py-0.5">
+                {myEbayItems.map(({ label, to }) =>
+                  to ? (
+                    <Link
+                      key={label}
+                      to={to}
+                      className="block px-3 py-1 text-xs text-gray-800 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                    >
+                      {label}
+                    </Link>
+                  ) : (
+                    <span
+                      key={label}
+                      className="block px-3 py-1 text-xs text-gray-800 cursor-default pointer-events-none"
+                      title="Chưa phát triển"
+                    >
+                      {label}
+                    </span>
+                  ),
+                )}
+              </div>
             </div>
+
             <button>
               <svg
                 className="w-5 h-5 text-gray-600"
@@ -179,45 +228,49 @@ function Navbar() {
         </button>
 
         {/* Search bar */}
-        <div className="flex flex-1 border-2 border-gray-800 rounded-full overflow-hidden">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            placeholder="Search for anything"
-            className="flex-1 px-4 py-2 text-sm outline-none"
-          />
-          <button className="px-3 text-gray-500 hover:text-gray-700 border-l border-gray-200">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-          </button>
-          <select className="border-l border-gray-300 px-2 text-xs text-gray-600 outline-none hidden md:block bg-gray-50">
-            <option>All Categories</option>
-            <option>Electronics</option>
-            <option>Fashion</option>
-            <option>Motors</option>
-          </select>
+        <div className="flex flex-1 items-center gap-2">
+          <div className="flex flex-1 border-2 border-gray-800 rounded-full overflow-hidden">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              placeholder="Search for anything"
+              className="flex-1 px-4 py-2 text-sm outline-none"
+            />
+            <button className="px-3 text-gray-500 hover:text-gray-700 border-l border-gray-200">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </button>
+            <select className="border-l border-gray-300 px-2 text-xs text-gray-600 outline-none hidden md:block bg-gray-50">
+              <option>All Categories</option>
+              <option>Electronics</option>
+              <option>Fashion</option>
+              <option>Motors</option>
+            </select>
+          </div>
+
+          {/* Nút Search tách riêng ra ngoài */}
           <button
             onClick={handleSearch}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-sm font-semibold"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 text-sm font-semibold rounded-full flex-shrink-0"
           >
             Search
           </button>
@@ -230,31 +283,32 @@ function Navbar() {
       </div>
 
       {/* Category bar */}
-      {/* Category bar */}
-      <div className="border-t border-gray-200">
-        <div className="max-w-screen-2xl mx-auto px-4 py-2 flex gap-6 text-sm text-gray-700 overflow-x-auto justify-center">
-          {[
-            "Saved",
-            "Electronics",
-            "Motors",
-            "Fashion",
-            "Collectibles and art",
-            "Sports",
-            "Health and beauty",
-            "Industrial equipment",
-            "Home and garden",
-            "Deals",
-            "Sell",
-          ].map((item) => (
-            <span
-              key={item}
-              className="hover:underline cursor-pointer whitespace-nowrap"
-            >
-              {item}
-            </span>
-          ))}
+      {!hideCategories && (
+        <div className="border-t border-gray-200">
+          <div className="max-w-screen-2xl mx-auto px-4 py-2 flex gap-6 text-sm text-gray-700 overflow-x-auto justify-center">
+            {[
+              "Saved",
+              "Electronics",
+              "Motors",
+              "Fashion",
+              "Collectibles and art",
+              "Sports",
+              "Health and beauty",
+              "Industrial equipment",
+              "Home and garden",
+              "Deals",
+              "Sell",
+            ].map((item) => (
+              <span
+                key={item}
+                className="hover:underline cursor-pointer whitespace-nowrap"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

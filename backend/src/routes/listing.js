@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
+const role = require("../middleware/role");
 const {
   getListings,
   getListing,
@@ -9,6 +10,5 @@ const {
 
 router.get("/", getListings);
 router.get("/:id", getListing);
-router.post("/", auth, createListing);
-
+router.post("/", auth, role("seller"), createListing); // ← chỉ seller
 module.exports = router;

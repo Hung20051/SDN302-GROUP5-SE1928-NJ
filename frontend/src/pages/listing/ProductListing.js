@@ -171,7 +171,7 @@ function ProductListing() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+      <Navbar hideCategories />
       <main className="max-w-6xl mx-auto px-6 py-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

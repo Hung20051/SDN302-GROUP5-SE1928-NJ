@@ -203,13 +203,15 @@ function ProductDetail() {
                     </div>
                   </div>
                 </div>
-                <ChatWidget
-                  sellerId={listing.sellerId?._id}
-                  sellerName={listing.sellerId?.username}
-                  listingId={listing._id}
-                  listingTitle={listing.title}
-                  buttonStyle="small"
-                />
+                {user?._id !== listing.sellerId?._id && (
+                  <ChatWidget
+                    sellerId={listing.sellerId?._id}
+                    sellerName={listing.sellerId?.username}
+                    listingId={listing._id}
+                    listingTitle={listing.title}
+                    buttonStyle="small"
+                  />
+                )}
               </div>
               <div className="flex gap-3 text-xs text-blue-600">
                 <span className="hover:underline cursor-pointer">
@@ -272,15 +274,23 @@ function ProductDetail() {
 
             {/* Buttons */}
             <div className="flex flex-col gap-3">
-              <button
-                onClick={() => navigate(`/checkout/${listing._id}`)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full font-semibold text-sm transition"
-              >
-                Buy It Now
-              </button>
-              <button className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 py-3 rounded-full font-semibold text-sm transition">
-                Add to cart
-              </button>
+              {user?._id === listing.sellerId?._id ? (
+                <div className="w-full bg-gray-100 text-gray-400 py-3 rounded-full font-semibold text-sm text-center">
+                  Đây là sản phẩm của bạn
+                </div>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate(`/checkout/${listing._id}`)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full font-semibold text-sm transition"
+                  >
+                    Buy It Now
+                  </button>
+                  <button className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 py-3 rounded-full font-semibold text-sm transition">
+                    Add to cart
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
-// Pages (sẽ thêm dần)
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -11,6 +10,9 @@ import PrivacyNotice from "./pages/PrivacyNotice";
 import ProductListing from "./pages/listing/ProductListing";
 import ProductDetail from "./pages/listing/ProductDetail";
 import Checkout from "./pages/listing/Checkout";
+import NotFound from "./pages/NotFound";
+import Messages from "./pages/chat/Messages";
+
 function App() {
   return (
     <AuthProvider>
@@ -24,6 +26,8 @@ function App() {
           <Route path="/listings" element={<ProductListing />} />
           <Route path="/listing/:id" element={<ProductDetail />} />
           <Route path="/checkout/:id" element={<Checkout />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

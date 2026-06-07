@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
@@ -40,6 +40,11 @@ function Checkout() {
   const fetchListing = async () => {
     try {
       const res = await api.get(`/listings/${id}`);
+      // Seller không được vào checkout hàng của mình
+      if (res.data.sellerId?._id === user?._id) {
+        navigate(`/listing/${id}`);
+        return;
+      }
       setListing(res.data);
     } catch (err) {
       console.error(err);
@@ -138,10 +143,10 @@ function Checkout() {
           </span>
           <span className="text-2xl font-medium text-gray-900">Checkout</span>
         </div>
-        <a href="#" className="text-sm text-gray-500 hover:underline">
+        <button className="text-sm text-gray-500 hover:underline">
           How do you like our checkout?{" "}
           <span className="text-blue-600">Give us feedback</span>
-        </a>
+        </button>
       </div>
 
       <main className="w-full px-12 py-8 max-w-screen-xl mx-auto">

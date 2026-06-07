@@ -55,16 +55,15 @@ exports.getOrCreateConversation = async (req, res) => {
   try {
     const { receiverId, listingId } = req.body;
 
-    // Kiểm tra conversation đã tồn tại chưa
+    // Chỉ tìm theo participants, BỎ listingId
     let conversation = await Conversation.findOne({
       participants: { $all: [req.userId, receiverId] },
-      listingId: listingId || null,
     });
 
     if (!conversation) {
       conversation = await Conversation.create({
         participants: [req.userId, receiverId],
-        listingId: listingId || null,
+        listingId: listingId || null, // vẫn lưu listing đầu tiên
         unreadCount: { [receiverId]: 0, [req.userId]: 0 },
       });
     }
